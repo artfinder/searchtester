@@ -1,6 +1,8 @@
 ENV
 dist
 build
-searchtester.egg-info
+*.egg-info
+*.egg
 ._*
 *.tsv
+*.pyc
