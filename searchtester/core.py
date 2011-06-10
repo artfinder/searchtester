@@ -1,7 +1,9 @@
+# -*- encoding: utf-8 -*-
 import csv
 import urllib
 import urlparse
 import sys
+import time
 from lxml.html import parse
 import eventlet
 from eventlet.green import urllib2
@@ -62,6 +64,7 @@ class SearchSystemTest(object):
         Takes a file where each line gives a search and a list of
         expected URLs.
         """
+        start_time = time.time()
         pool = eventlet.GreenPool(size=poolsize)
 
         inf = open(in_filename, 'r')
@@ -81,6 +84,8 @@ class SearchSystemTest(object):
             except:
                 print >>sys.stderr, "Caught exception while testing", query.encode('utf-8')
                 return (query, map(lambda x: None, expected))
+        print "Running searches..."
+        print
         results = pool.imap(doeeet, r)
         with open(out_filename, 'w') as outf:
             w = csv.writer(outf, dialect='excel-tab')
@@ -91,12 +96,20 @@ class SearchSystemTest(object):
                 row = [ result[0], score ] # the query and score
                 row.extend(result[1]) # and the positions
                 w.writerow(map(lambda x: unicode(x).encode('utf-8') if x is not None else "", row))
-                print "\t%s\t%s" % (result[0], score)
+                if len(result[0]) > 69:
+                    truncated_name = result[0][:69] + "…"
+                else:
+                    truncated_name = result[0]
+                print u"  %-70.70s %.2f" % (truncated_name, score)
                 if count % 10 == 9:
+                    print
                     print "Average score", float(sum(scores)) / len(scores)
+                    print
         inf.close()
         print
         print "Summary"
         print "-------"
         print
-        print "Ran %i queries, average score %f" % (len(scores), float(sum(scores)) / len(scores))
+        run_time = time.time() - start_time
+        print "Ran %i queries in %.2f seconds, average score %f." % (len(scores), run_time, float(sum(scores)) / len(scores))
+        print
