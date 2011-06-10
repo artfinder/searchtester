@@ -1,0 +1,6 @@
+ENV
+dist
+build
+searchtester.egg-info
+._*
+*.tsv
