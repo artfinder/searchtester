@@ -16,6 +16,7 @@ setup(
     install_requires=[
         'lxml',
         'eventlet',
+        'unittest2',
     ],
     url = 'http://code.artfinder.com/projects/searchtester/',
     classifiers=[
@@ -32,4 +33,5 @@ setup(
             'searchtest = searchtester:runtest',
         ],
     },
+    test_suite="unittest2.collector",
 )
