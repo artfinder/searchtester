@@ -52,8 +52,17 @@ class SearchSystemTest(object):
             resolved = urlparse.urljoin(url, actual)
             for idx, possible in enumerate(expected):
                 # print i, idx, actual, resolved, possible
-                if resolved == possible and positions.get(idx, None) is None:
-                    positions[idx] = i
+                
+                # note that we could just do:
+                # if resolved == possible and positions.get(idx, None) is None:
+                # but we don't so that duplicate search results get spotted.
+                if resolved == possible:
+                    if positions.get(idx, None) is not None:
+                        # print "found", possible, "already at", positions[idx]
+                        del positions[idx]
+                    else:
+                        # print "found", possible, "at", i
+                        positions[idx] = i
         result = []
         for i in range(0, len(expected)):
             result.append(positions.get(i, None))
