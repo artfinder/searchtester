@@ -75,6 +75,7 @@ So we can do:
 and we get the reassuring:
 
     Calculating scores...
+    
       searchtester                                                           0.00
     
     Summary
