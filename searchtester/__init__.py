@@ -22,3 +22,43 @@ def runtest():
     )
     s.test_searches(args[0], args[1])
     return 0
+
+
+def scoretest():
+    from searchtester.scoring import calculate_score
+    import csv
+    from optparse import OptionParser
+    
+    parser = OptionParser(
+        usage="usage: %prog [options] resultsfile",
+        description="Given a TSV file of searches and 0-indexed positions the best matches were found at, print an 'accuracy' score for each query. Prints a final summary including the average accuracy score.",
+    )
+    
+    (options, args) = parser.parse_args()
+    if len(args) != 1:
+        parser.error("Must provide a results file, from a previous searchtest run .")
+    with open(args[0]) as f:
+        print "Calculating scores..."
+        print
+        r = csv.reader(f, dialect='excel-tab')
+        scores = []
+        for count, row in enumerate(r):
+            score = calculate_score(row[2:])
+            scores.append(score)
+            if len(row[0]) > 69:
+                truncated_name = row[0][:69] + "…"
+            else:
+                truncated_name = row[0]
+            print u"  %-70.70s %.2f" % (truncated_name, score)
+            if count % 10 == 9:
+                print
+                print "Average score", float(sum(scores)) / len(scores)
+                print
+    print
+    print "Summary"
+    print "-------"
+    print
+    print "%i queries, average score %f." % (len(scores), float(sum(scores)) / len(scores))
+    print
+
+    return 0

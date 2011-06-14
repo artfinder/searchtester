@@ -31,6 +31,7 @@ setup(
     entry_points= {
         'console_scripts': [
             'searchtest = searchtester:runtest',
+            'scoretest = searchtester:scoretest',
         ],
     },
     test_suite="unittest2.collector",
