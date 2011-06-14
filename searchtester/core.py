@@ -23,12 +23,11 @@ class SearchSystemTest(object):
             self.param: query.encode('utf-8'),
         }
         params.update(self.params)
-
-        url = "%s?%s" % (
-            self.endpoint,
-            urllib.urlencode(params),
-        )
-        #print url
+        endpoint = list(urlparse.urlparse(self.endpoint))
+        existing = urlparse.parse_qs(endpoint[4])
+        params.update(existing)
+        endpoint[4] = urllib.urlencode(params, True)
+        url = urlparse.urlunparse(endpoint)
         return url
 
     def test_search(self, query, expected):
