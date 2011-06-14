@@ -18,7 +18,7 @@ setup(
         'eventlet',
         'unittest2',
     ],
-    url = 'http://code.artfinder.com/projects/searchtester/',
+    # url = 'http://code.artfinder.com/projects/searchtester/',
     classifiers=[
         'Intended Audience :: Developers',
         'Environment :: Console',
