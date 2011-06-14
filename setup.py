@@ -5,7 +5,7 @@ except ImportError:
     from distutils.core import setup
 
 PACKAGE = 'searchtester'
-VERSION = '0.1'
+VERSION = '0.5'
 
 setup(
     name=PACKAGE, version=VERSION,
