@@ -10,6 +10,30 @@ from eventlet.green import urllib2
 
 from searchtester.scoring import calculate_score
 
+def find_expected_result_positions(results, expected, searchurl):
+    positions = {} # index in expected list
+    for i, link in enumerate(results):
+        resolved = urlparse.urljoin(searchurl, link)
+        #print link, resolved
+        for idx, possible in enumerate(expected):
+            #print i, idx, link, resolved, possible
+                
+            # note that we could just do:
+            # if resolved == possible and positions.get(idx, None) is None:
+            # but we don't so that duplicate search results get spotted.
+            if resolved == possible:
+                if positions.get(idx, None) is not None:
+                    #print "found", possible, "already at", positions[idx]
+                    del positions[idx]
+                else:
+                    #print "found", possible, "at", i
+                    positions[idx] = i
+    result = []
+    for i in range(0, len(expected)):
+        result.append(positions.get(i, None))
+    return result
+
+
 class SearchSystemTest(object):
 
     def __init__(self, endpoint, selector='ol li a', param='q', extra={}):
@@ -45,27 +69,11 @@ class SearchSystemTest(object):
         f.close()
         #print root
         
-        positions = {} # index in expected list
-        for i, link in enumerate(root.cssselect(self.selector)):
-            actual = link.get("href")
-            resolved = urlparse.urljoin(url, actual)
-            for idx, possible in enumerate(expected):
-                # print i, idx, actual, resolved, possible
-                
-                # note that we could just do:
-                # if resolved == possible and positions.get(idx, None) is None:
-                # but we don't so that duplicate search results get spotted.
-                if resolved == possible:
-                    if positions.get(idx, None) is not None:
-                        # print "found", possible, "already at", positions[idx]
-                        del positions[idx]
-                    else:
-                        # print "found", possible, "at", i
-                        positions[idx] = i
-        result = []
-        for i in range(0, len(expected)):
-            result.append(positions.get(i, None))
-        return result
+        return find_expected_result_positions(
+            map(lambda x: x.get("href"), root.cssselect(self.selector)),
+            expected,
+            url
+        )
 
     def test_searches(self, in_filename, out_filename, poolsize=10):
         """
