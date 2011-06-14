@@ -12,7 +12,9 @@ setup(
     description="Simple system for testing search results, and using that to measure effectiveness of your current search ranking",
     packages=[ 'searchtester' ],
     license='MIT',
-    author='Art Dicovery Ltd',
+    author='Art Discovery Ltd',
+    maintainer='James Aylett',
+    maintainer_email='james@tartarus.org',
     install_requires=[
         'lxml',
         'eventlet',
