@@ -52,8 +52,9 @@ That actually looks pretty bad:
     
     Ran 1 queries in 2.30 seconds, average score 0.004926.
 
-Mostly because (at least right now) there are a bunch of dead projects
-and Rails clones cluttering up the results.
+But this is because github's ranking is favouring other projects.
+That's okay; the important thing is that we have a replicable test
+for where the results we care about are in the search results.
 
 The last option you may need is `-p`, which allows you to change the
 default query parameter from `q`.
