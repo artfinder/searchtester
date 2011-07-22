@@ -46,7 +46,7 @@ def scoretest():
             score = calculate_score(row[2:])
             scores.append(score)
             if len(row[0]) > 69:
-                truncated_name = row[0][:69] + "…"
+                truncated_name = row[0][:69] + u"…"
             else:
                 truncated_name = row[0]
             print u"  %-70.70s %.2f" % (truncated_name, score)

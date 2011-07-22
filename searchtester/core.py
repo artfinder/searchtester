@@ -113,7 +113,7 @@ class SearchSystemTest(object):
                 row.extend(result[1]) # and the positions
                 w.writerow(map(lambda x: unicode(x).encode('utf-8') if x is not None else "", row))
                 if len(result[0]) > 69:
-                    truncated_name = result[0][:69] + "…"
+                    truncated_name = result[0][:69] + u"…"
                 else:
                     truncated_name = result[0]
                 print u"  %-70.70s %.2f" % (truncated_name, score)
